@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Mysterious Blogs</title>
+    <style>
+        @keyframes borderAnimation {
+            0% { border-image-source: linear-gradient(to bottom right, #ff6347, #1e90ff, #32cd32, #ff6347); }
+            25% { border-image-source: linear-gradient(to bottom right, #1e90ff, #32cd32, #ff6347, #1e90ff); }
+            50% { border-image-source: linear-gradient(to bottom right, #32cd32, #ff6347, #1e90ff, #32cd32); }
+            75% { border-image-source: linear-gradient(to bottom right, #ff6347, #1e90ff, #32cd32, #ff6347); }
+            100% { border-image-source: linear-gradient(to bottom right, #1e90ff, #32cd32, #ff6347, #1e90ff); }
+        }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #121212;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            border: 8px solid; /* Increase border thickness */
+            border-image-slice: 1;
+            animation: borderAnimation 5s linear infinite; /* Increased speed */
+        }
+        header {
+            background-color: #1a1a1a;
+            color: #ff6347;
+            padding: 1em 0;
+            border-bottom: 2px solid #ff6347;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .hamburger-menu {
+            display: inline-block;
+            cursor: pointer;
+            padding-left: 20px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #ff6347;
+            margin: 5px 0;
+        }
+        .menu {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #1a1a1a;
+            border-right: 2px solid #ff6347;
+            padding-top: 60px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .menu a {
+            padding: 15px 20px;
+            color: #ff6347;
+            text-decoration: none;
+            border-bottom: 1px solid #ff6347;
+        }
+        .menu a:hover {
+            background-color: #ff6347;
+            color: #1a1a1a;
+        }
+        .menu.show {
+            display: flex;
+            transform: translateX(0);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+        }
+        .overlay.show {
+            display: block;
+        }
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 20px;
+        }
+        .login {
+            margin-top: 10px;
+        }
+        .login div {
+            cursor: pointer;
+            background-color: #ff6347;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+        }
+        .login div:hover {
+            background-color: #e5533c;
+        }
+        section {
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .about-me, .contact-info, .add-post {
+            background-color: rgba(30, 30, 30, 0.9); /* Slightly transparent */
+            border: 2px solid #1e90ff; /* Night sky blue */
+        }
+        h2 {
+            color: #ff6347;
+        }
+        a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .post-box {
+            background-color: rgba(30, 30, 30, 0.9); /* Slightly transparent */
+            border: 2px solid #1e90ff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+        }
+        .post-box h3 {
+            margin-top: 0;
+            color: #ff6347;
+        }
+        .post-box button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff6347;
+            border: none;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: none; /* Hide the delete button */
+        }
+        .post-box button:hover {
+            background-color: #e5533c;
+        }
+        .empty-post-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(30, 30, 30, 0.9); /* Slightly transparent */
+            border: 2px dashed #1e90ff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: #ff6347;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #1a1a1a;
+            color: #ff6347;
+            border-top: 2px solid #ff6347;
+        }
+        .bg-universe { background-image: url('universe.jpg'); }
+        .bg-aliens { background-image: url('aliens.jpg'); }
+        .bg-time-travel { background-image: url('timetravel.jpg'); }
+        .bg-ghosts { background-image: url('ghosts.jpg'); }
+        .bg-events { background-image: url('events.jpg'); }
+        .bg-illuminati { background-image: url('illuminati.jpg'); }
+        .bg-politics { background-image: url('politics.jpg'); }
+        .bg-hidden-truth { background-image: url('hiddentruth.jpg'); }
+        .bg-gov-secrets { background-image: url('govsecrets.jpg'); }
+        .bg-add-post { background-image: url('addpost.jpg'); }
+    </style>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            var overlay = document.getElementById('overlay');
+            menu.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
+        function closeMenu() {
+            var menu = document.getElementById('menu');
+            var overlay = document.getElementById('overlay');
+            menu.classList.remove('show');
+            overlay.classList.remove('show');
+        }
+
+        function addPostBox() {
+            var postGrid = document.querySelector('.post-grid');
+            var newPostBox = document.createElement('div');
+            newPostBox.className = 'post-box';
+            newPostBox.innerHTML = '<button onclick="deletePostBox(this)">Delete</button><h3>New Post</h3><p>Description for the new post.</p>';
+            postGrid.appendChild(newPostBox);
+            showDeleteButtons(); // Show delete buttons after adding a post
+        }
+
+        function deletePostBox(button) {
+            var postBox = button.parentElement;
+            postBox.remove();
+        }
+
+        function showDeleteButtons() {
+            var buttons = document.querySelectorAll('.post-box button');
+            buttons.forEach(button => {
+                button.style.display = 'block';
+            });
+        }
+
+        // Call this function when the owner is logged in
+        function ownerLoggedIn() {
+            showDeleteButtons();
+        }
+
+        document.addEventListener('click', function(event) {
+            var menu = document.getElementById('menu');
+            var overlay = document.getElementById('overlay');
+            var hamburger = document.querySelector('.hamburger-menu');
+            if (!menu.contains(event.target) && !hamburger.contains(event.target) && menu.classList.contains('show')) {
+                closeMenu();
+            }
+        });
+    </script>
+</head>
+<body>
+
+<header>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <h1>Welcome to Mysterious Blogs</h1>
+    <div class="right-section">
+        <div class="login" onclick="ownerLoggedIn()">
+            <div>Login</div>
+        </div>
+    </div>
+</header>
+
+<div class="menu" id="menu">
+    <a href="#recent-posts">Recent</a>
+    <a href="#about-me">About Me</a>
+    <a href="#contact-info">Contact</a>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<section id="recent-posts" class="post-grid">
+    <div class="post-box bg-universe">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Universe</h3>
+        <p>Explore the mysteries of the universe.</p>
+    </div>
+    <div class="post-box bg-aliens">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Aliens</h3>
+        <p>Discover the truth about extraterrestrial life.</p>
+    </div>
+    <div class="post-box bg-time-travel">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Time Travel</h3>
+        <p>Delve into the possibilities and paradoxes of time travel.</p>
+    </div>
+    <div class="post-box bg-ghosts">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Ghosts</h3>
+        <p>Investigate the existence and stories of ghosts.</p>
+    </div>
+    <div class="post-box bg-events">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Events</h3>
+        <p>Analyze mysterious and unexplained events.</p>
+    </div>
+    <div class="post-box bg-illuminati">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Illuminati</h3>
+        <p>Explore the secrets and conspiracies of the Illuminati.</p>
+    </div>
+    <div class="post-box bg-politics">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Politics</h3>
+        <p>Examine the hidden aspects of political affairs.</p>
+    </div>
+    <div class="post-box bg-hidden-truth">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Hidden Truth</h3>
+        <p>Reveal the hidden truths and untold stories.</p>
+    </div>
+    <div class="post-box bg-gov-secrets">
+        <button onclick="deletePostBox(this)">Delete</button>
+        <h3>Government Secrets</h3>
+        <p>Uncover the secrets kept by governments.</p>
+    </div>
+    <div class="empty-post-box bg-add-post" onclick="addPostBox()">
+        <p>Add New Post</p>
+    </div>
+</section>
+
+<section id="about-me" class="about-me">
+    <h2>About Me</h2>
+    <p>Hello! My name is Devesh Dwivedi. Welcome to my personal webpage where I explore the unknown, the mysterious, and the topics nobody dares to talk about. Dive in and discover the secrets hidden in plain sight.</p>
+</section>
+
+<section id="contact-info" class="contact-info">
+    <h2>Contact Information</h2>
+    <p>Email: <a href="mailto:deveshdwivedi1515@gmail.com">deveshdwivedi1515@gmail.com</a></p>
+    <p>Phone: 8130100879</p>
+</section>
+
+<footer>
+    <p>&copy; 2024 Devesh Dwivedi. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
